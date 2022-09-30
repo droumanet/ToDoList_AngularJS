@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+        <title>ToDo prRoumanet</title>
+    </head>
+    <body ng-app="maToDoList" >
+        <h1>ToDoList prRoumanet</h1>
+        <div ng-controller="CtrlToDoList">
+            Saisir tâche:<br> <input type="text" ng-model="task" /> <button ng-click="AddMessage(task)">Créer</button><br /><br />
+            <div ng-show="correction>''">Modifier : <input type="text" ng-model="indexModif" hidden> <input type="text" ng-model="correction"></button><button ng-click="ModifyMessage(indexModif, correction)">✅</button></div>
+            <ul>
+                <li ng-repeat="tache in maListe"><input type="text" ng-model="index" value={{$index}} hidden><button ng-click="DeleteMessage($index)">❌</button><button ng-click="EditMessage($index, tache)">✒️</button> {{tache}}</li>
+            </ul>
+        </div>
+        <script>
+            var myApp = angular.module('maToDoList', []);
+            
+            myApp.controller("CtrlToDoList", function ($scope, $window) {
+                $scope.maListe = ["Nettoyer les fenêtres", "Ranger les dossier", "Apporter un thème", "Modifier le bureau"]
+                $scope.DeleteMessage = function (value) {
+                    $scope.maListe.splice(value, 1)
+                }
+                $scope.AddMessage = function(value) {
+                    console.log("Add")
+                    $scope.maListe.push(value)
+                    $scope.task = ""
+                }
+                $scope.EditMessage = function(index, value) {
+                    console.log("Editer", index, value)
+                    if ($scope.correction==undefined) {
+                        console.log("Edition")
+                        $scope.indexModif = index
+                        $scope.correction = value
+                    }
+                    else {
+                        if ($scope.indexModif == index) {
+                            console.log("Validation")
+                            $scope.maListe[index] = $scope.correction 
+                            $scope.correction = undefined
+                        }
+                    }
+                }
+                $scope.ModifyMessage = function (index, value) {
+                    console.log("Modifiy", index, value)
+                    $scope.maListe[index] = value 
+                    $scope.correction = undefined
+                }
+            });
+        </script>
+    </body>
+</html>
